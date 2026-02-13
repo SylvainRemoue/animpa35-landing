@@ -14,7 +14,7 @@ export default function Footer() {
           <div>
             <a href="#" aria-label="Anim'PA 35 — Retour à l'accueil">
               <img
-                src="/logo-animpa35.png"
+                src={`${import.meta.env.BASE_URL}logo-animpa35.png`}
                 alt="Anim'PA 35"
                 className="h-12 w-auto brightness-0 invert"
               />

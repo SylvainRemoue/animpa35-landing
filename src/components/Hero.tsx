@@ -45,7 +45,7 @@ export default function Hero() {
       {/* Content */}
       <motion.div style={{ opacity }} className="relative z-10 text-center px-4 max-w-4xl mx-auto">
         <motion.img
-          src="/logo-animpa35.png"
+          src={`${import.meta.env.BASE_URL}logo-animpa35.png`}
           alt="Anim'PA 35"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}

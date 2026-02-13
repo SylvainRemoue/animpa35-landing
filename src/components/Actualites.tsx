@@ -20,7 +20,7 @@ export default function Actualites() {
   const [showAll, setShowAll] = useState(false)
 
   useEffect(() => {
-    fetch('/posts.json')
+    fetch(`${import.meta.env.BASE_URL}posts.json`)
       .then((res) => res.json())
       .then((data: Post[]) => {
         const sorted = data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())

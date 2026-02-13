@@ -43,7 +43,7 @@ export default function Header() {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 md:h-20" aria-label="Navigation principale">
         <a href="#" className="flex items-center z-10" aria-label="Anim'PA 35 — Retour à l'accueil">
           <img
-            src="/logo-animpa35.png"
+            src={`${import.meta.env.BASE_URL}logo-animpa35.png`}
             alt="Anim'PA 35"
             className={`h-12 md:h-14 w-auto transition-all duration-300 ${scrolled ? '' : 'brightness-0 invert'}`}
           />
