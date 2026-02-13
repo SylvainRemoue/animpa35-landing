@@ -2,70 +2,74 @@
 
 Site web vitrine de l'association **Anim'PA 35**, association des animateurs en gérontologie d'Ille-et-Vilaine.
 
+Déployé automatiquement sur **GitHub Pages** : [sylvainremoue.github.io/animpa35-landing](https://sylvainremoue.github.io/animpa35-landing/)
+
 ## Stack technique
 
 - **React** + **TypeScript** avec **Vite**
-- **Tailwind CSS** pour le styling
+- **Tailwind CSS v4** pour le styling
 - **Framer Motion** pour les animations
-- **Express** pour le serveur API (proxy Facebook Graph API)
-
-## Prérequis — Token Facebook
-
-Le site récupère les posts directement depuis la **page Facebook** via l'API Graph. Il faut un **Page Access Token**.
-
-### Obtenir le token
-
-1. Aller sur [developers.facebook.com](https://developers.facebook.com/) et créer une app
-2. Ajouter le produit **Facebook Login**
-3. Dans l'**Explorateur de l'API Graph** ([ici](https://developers.facebook.com/tools/explorer/)), sélectionner votre app
-4. Demander les permissions : `pages_show_list`, `pages_read_engagement`
-5. Générer un **User Access Token**, puis sélectionner la page Anim'PA 35 pour obtenir un **Page Access Token**
-6. Pour un token longue durée : utiliser l'[Access Token Debugger](https://developers.facebook.com/tools/debug/accesstoken/) → "Extend Access Token"
-
-### Configurer
-
-```bash
-cp .env.example .env
-```
-
-Remplir `.env` :
-
-```
-FB_PAGE_ID=100069875984629
-FB_ACCESS_TOKEN=votre_token_ici
-```
+- **GitHub Actions** pour le déploiement automatique
 
 ## Développement local
 
 ```bash
-# Installer les dépendances
 npm install
-
-# Terminal 1 : API server (port 3001)
-npm run server
-
-# Terminal 2 : Vite dev server (port 5173, proxy vers 3001)
 npm run dev
 ```
 
 Le site est accessible sur `http://localhost:5173/`.
 
-## Production
+## Build production
 
 ```bash
-# Build du frontend
 npm run build
-
-# Démarrer le serveur (sert le frontend + l'API)
-npm start
+npm run preview   # pour tester le build localement
 ```
-
-Le serveur écoute sur le port `3001` (ou `PORT` si défini).
 
 ## Structure du site
 
 - **Hero** — Section d'accueil avec parallaxe et animations
-- **Actualités** — Posts Facebook récupérés en temps réel via l'API Graph (texte, photos, vidéos)
+- **Actualités** — Posts gérés via le back-office local (texte, photos, vidéos)
 - **Nos Missions** — 3 cartes : Collectifs, Bals Inter-EHPAD, Drive Partagé
-- **Qui sommes-nous** — Présentation + statuts en accordéon
+- **Qui sommes-nous** — Présentation + compteurs animés + statuts en accordéon
 - **Contact** — Email et Facebook
+
+## Back-office local
+
+Le dossier `admin/` contient un petit back-office pour gérer les actualités **sans toucher au code**. Il met à jour le fichier `public/posts.json`, commit et push automatiquement sur GitHub, ce qui déclenche le redéploiement du site.
+
+### Prérequis
+
+- Le repo doit être cloné sur la machine
+- Git doit être configuré avec un accès push au repo (SSH ou HTTPS)
+- Node.js installé
+
+### Lancer le back-office
+
+```bash
+cd admin
+npm install   # uniquement la première fois
+npm start
+```
+
+Puis ouvrir **http://localhost:3333** dans le navigateur.
+
+### Fonctionnalités
+
+- **Créer** une actualité : écrire le texte, choisir la date, ajouter des photos/vidéos (glisser-déposer ou clic), puis cliquer **Publier**
+- **Modifier** une actualité existante : changer le texte, la date, ajouter ou supprimer des médias
+- **Supprimer** une actualité
+
+Chaque action enregistre les modifications, commit et push sur GitHub. Le site est mis à jour en ligne sous ~1 minute (temps du déploiement GitHub Actions).
+
+### Fonctionnement technique
+
+Le back-office est un serveur Express local qui :
+
+1. Lit et écrit dans `public/posts.json`
+2. Stocke les images/vidéos uploadées dans `public/images/`
+3. Exécute `git add -A && git commit && git push` après chaque modification
+4. GitHub Actions détecte le push et redéploie le site sur GitHub Pages
+
+Le back-office n'est **pas déployé en ligne** — il tourne uniquement en local sur la machine de la personne qui gère les actualités.
