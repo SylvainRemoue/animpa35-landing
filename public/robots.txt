@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://animpa35.github.io/sitemap.xml
+Sitemap: https://sylvainremoue.github.io/animpa35-landing/sitemap.xml
